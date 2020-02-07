@@ -1,0 +1,151 @@
+<html>
+  <head>
+    <title>Election Login</title>
+
+    <link rel="stylesheet" type="text/css" href="HomeStyle.css" />
+  </head>
+  <body bgcolor="#FCEEB5">
+    <img
+      src="https://seeklogo.com/images/E/election-commission-of-india-logo-324FF87C0E-seeklogo.com.png"
+      align="middle"
+      style="margin-left:40% ;"
+    />
+    <h1>Enter Mobile Number to Login</h1>
+    <form>
+      <input type="text" id="number" placeholder="+91********" />
+
+      <button type="button" class="button" onclick="phoneAuth();">
+        SendCode
+      </button>
+    </form>
+    <br />
+    <h1>Enter Verification code</h1>
+    <form>
+      <input
+        type="text"
+        id="verificationCode"
+        placeholder="Enter verification code"
+      />
+      <button type="button" class="button" onclick="codeverify();">
+        Verify code
+      </button>
+    </form>
+</body>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-database.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+    apiKey: "AIzaSyCYczuDbi3wjaKY13Pu3l-lwhAg7FQP29o",
+    authDomain: "voting-tsec-hacks-2020.firebaseapp.com",
+    databaseURL: "https://voting-tsec-hacks-2020.firebaseio.com",
+    projectId: "voting-tsec-hacks-2020",
+    storageBucket: "voting-tsec-hacks-2020.appspot.com",
+    messagingSenderId: "365388870989",
+    appId: "1:365388870989:web:7675403178c2f060acb304",
+    measurementId: "G-PCYKYYHBMD"
+ 
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    window.onload=function () {
+  render();
+};
+function render() {
+    window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    recaptchaVerifier.render();
+}
+function phoneAuth() {
+    //get the number
+    var number=document.getElementById('number').value;
+    //phone number authentication function of firebase
+    //it takes two parameter first one is number,,,second one is recaptcha
+    firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function (confirmationResult) {
+        //s is in lowercase
+        window.confirmationResult=confirmationResult;
+        coderesult=confirmationResult;
+        console.log(coderesult);
+        alert("Message sent");
+    }).catch(function (error) {
+        alert(error.message);
+    });
+}
+function redirect(){
+    window.location="./index_old.html";
+}
+function json2array(json){
+    var result = [];
+    var keys = Object.keys(json);
+    keys.forEach(function(key){
+        result.push(json[key]);
+    });
+    return result;
+}
+
+/*function codeverify() {
+    var code=document.getElementById('verificationCode').value;
+    coderesult.confirm(code).then(function (result) {
+        alert("Successfully Logged in");
+        return firebase.database().ref('users').once('value').then(function(snapshot) {
+                    if(snapshot.exists()){
+                        snapshot.forEach(function(userSnapshot) {
+                           var x=userSnapshot.val();
+                            var myJSON = JSON.stringify(x);
+                            console.log(myJSON);
+                            //redirect.call();
+                        })
+                    }
+                });
+       
+        
+        }).catch(function (error) {
+        alert(error.message);
+    });
+}
+*/
+function codeverify() {
+    var code=document.getElementById('verificationCode').value;
+    coderesult.confirm(code).then(function (result) {
+        alert("Successfully Logged in");
+
+        return firebase.database().ref('users').once('value').then(function(snapshot) {
+                    if(snapshot.exists()){
+                        snapshot.forEach(function(userSnapshot) {
+                           var json_data=userSnapshot.val();
+                           var x = json2array(json_data);
+                           //alert(x[3]);
+                           var key = x[3] + "";
+                           
+                           localStorage.setItem("storageName",key);
+                           //alert(localStorage.getItem("storageName"));
+                           redirect.call();
+                        });
+                    }
+        });
+       
+        
+        }).catch(function (error) {
+        alert(error.message);
+    });
+}
+
+    
+
+</script>
+<!-- <script src="NumberAuthentication.js" type="text/javascript"></script>
+ -->
+</body>
+</html>
