@@ -1,5 +1,6 @@
 # Evoting-System-In-BLOCKCHAIN
-This a basic working model of Voting in elections made using Blockchain. Includes Ethereum, Ganache, Metamask as main technologies used.<br>
+This Evoting system is Created in TSEC HACKS 2020 HACKATHON. 
+It is basic working model of Voting in elections made using Blockchain. Includes Ethereum, Ganache, Metamask as main technologies used.<br>
 Etherium is used as blockchain infra structure.<br>
 Ganache is used  to create smart contracts.<br>
 Metamask manages your identities on different sites and sign blockchain transactions.<br>
